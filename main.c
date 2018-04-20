@@ -1,9 +1,4 @@
-//  NOTES TO SELF
-// Need to make a value to represent the number so that you can put it into the switch function to call next menu.
 #include "Libraries.h";
-
-
-
 
 #define inputs GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7
 
@@ -45,13 +40,16 @@ static int keys[4][3] = {
     {10,0,12}
 };
 uint32_t prevNum = 20;
+
+//global variables
 int maintPass;
 int cleanPass;
 int adminPass;
 
+//start of main program
 void main(void)
 {
-    maintPass = 2;
+    maintPass = 2;  //declaring passwords
     cleanPass = 5;
     adminPass = 7;
 
@@ -81,7 +79,7 @@ void main(void)
 
 
 
-  while(1)
+  while(1) //to keep menu running
   {
       GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_4, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_4);
 
@@ -92,9 +90,9 @@ void main(void)
 
 /****************************   Functions *******************************/
 
-int BaseMenu()
+int BaseMenu()  //menu function, runs continuously through loop, once options are finished returns to beginning, if password is incorrect returns to beginning
 {
-    clearLCD();
+    clearLCD();  //initial menu to put in pin
     setCursorPositionLCD(0,5);
     printLCD("USER MENU");
     setCursorPositionLCD(2,0);
@@ -104,11 +102,11 @@ int BaseMenu()
     SysCtlDelay(1000000);
 
     while (GetKeyPress() == -1);
-    int choice = GetKeyPress();
+    int choice = GetKeyPress();  //get password input
 
-    if (choice == adminPass)
+    if (choice == adminPass)  //if password is correct continue into if statement
     {
-            clearLCD();
+            clearLCD();  //secondary menu
             printLCD("1) Maintenance");
             setCursorPositionLCD(1,0);
             printLCD("2) Cleaning");
@@ -116,11 +114,11 @@ int BaseMenu()
             printLCD("3) Administration");
             SysCtlDelay(10000000);
             while (GetKeyPress() == -1);
-            int choiceTwo = GetKeyPress();
+            int choiceTwo = GetKeyPress();  //menu choice input from keypad
 
             switch(choiceTwo)
             {
-            case 1:
+            case 1:  //for option 1
 
                     clearLCD();
                     printLCD("Enter maintenance");
@@ -129,27 +127,25 @@ int BaseMenu()
                     setCursorPositionLCD(2,0);
                     SysCtlDelay(10000000);
                     while (GetKeyPress() == -1);
-                    int choiceThree = GetKeyPress();
+                    int choiceThree = GetKeyPress();  //waiting for password input
 
-                    if (choiceThree == maintPass)
+                    if (choiceThree == maintPass)  //if password is correct
                     {
-                        clearLCD();
+                        clearLCD(); //code for stepper motor move would go inside here
                         setCursorPositionLCD(1,0);
                         printLCD("Moving into position");
-                      //  prevNum = 1;
                         SysCtlDelay(100000000);
                         break;
                     }
-                    else {
+                    else {  //if password is incorrect
                         clearLCD();
                         setCursorPositionLCD(1,0);
                         printLCD("Incorrect Password!");
-                       // prevNum = -1;
                         SysCtlDelay(10000000);
                         break;
                     }
 
-            case 2:
+            case 2: //for option 2
 
                     clearLCD();
                     printLCD("Enter cleaning");
@@ -158,17 +154,17 @@ int BaseMenu()
                     setCursorPositionLCD(2,0);
                     SysCtlDelay(10000000);
                     while (GetKeyPress() == -1);
-                    int choiceFour = GetKeyPress();
+                    int choiceFour = GetKeyPress();  //waiting for password input
 
-                    if (choiceFour == cleanPass)
+                    if (choiceFour == cleanPass)  //if password is correct
                     {
-                         clearLCD();
+                         clearLCD();  //code for motor moving would go in here
                          setCursorPositionLCD(1,0);
                          printLCD("Moving into position");
                          SysCtlDelay(100000000);
                          break;
                     }
-                    else {
+                    else {  //if password is incorrect
                          clearLCD();
                          setCursorPositionLCD(1,0);
                          printLCD("Incorrect Password!");
@@ -176,7 +172,7 @@ int BaseMenu()
                          break;
                     }
 
-            case 3:
+            case 3:  //for option 3
 
                 clearLCD();
                 printLCD("Enter administration");
@@ -185,9 +181,9 @@ int BaseMenu()
                 setCursorPositionLCD(2,0);
                 SysCtlDelay(10000000);
                 while (GetKeyPress() == -1);
-                int choiceFive = GetKeyPress();
+                int choiceFive = GetKeyPress();  //waiting for password input
 
-                if (choiceFive == adminPass)
+                if (choiceFive == adminPass) //if password is correct
                 {
                     clearLCD();
                     setCursorPositionLCD(0,2);
@@ -200,48 +196,48 @@ int BaseMenu()
                     printLCD("3) Administrative");
                     SysCtlDelay(10000000);
                     while (GetKeyPress() == -1);
-                    int choiceSix = GetKeyPress();
+                    int choiceSix = GetKeyPress(); //waiting for choice input
 
                         switch (choiceSix)
                         {
 
-                            case 1:
+                            case 1: //option 1
                                 clearLCD();
                                 printLCD("Enter new mainten-");
                                 setCursorPositionLCD(1,0);
                                 printLCD("ance password:");
                                 SysCtlDelay(10000000);
                                 while (GetKeyPress() == -1);
-                                int newMaint = GetKeyPress();
-                                maintPass = newMaint;
+                                int newMaint = GetKeyPress(); //waiting for new password input
+                                maintPass = newMaint; //input is assigned as new password value
                                 break;
 
-                             case 2:
+                             case 2:  //option 2
                                 clearLCD();
                                 printLCD("Enter new cleaning");
                                 setCursorPositionLCD(1,0);
                                 printLCD("password:");
                                 SysCtlDelay(10000000);
                                 while (GetKeyPress() == -1);
-                                int newClean = GetKeyPress();
-                                cleanPass = newClean;
+                                int newClean = GetKeyPress(); //waiting for new password input
+                                cleanPass = newClean;  //input is assigned as new password value
                                 break;
 
-                             case 3:
+                             case 3:  //option 3
                                 clearLCD();
                                 printLCD("Enter new administr-");
                                 setCursorPositionLCD(1,0);
                                 printLCD("ation password:");
                                 SysCtlDelay(10000000);
                                 while (GetKeyPress() == -1);
-                                int newAdmin = GetKeyPress();
-                                adminPass = newAdmin;
-                                choiceFive = newAdmin;
-                                choice = newAdmin;
+                                int newAdmin = GetKeyPress(); //waiting for new password input
+                                adminPass = newAdmin;  //input is assigned as new password value
+                                choiceFive = newAdmin;  //input is also assigned as password inputed so program does not think value is now incorrect
+                                choice = newAdmin; //input is also assigned to original pin so program does not think value is now incorrect
                                 break;
                              }
                          }
-                         if (choiceFive != adminPass)
+                         if (choiceFive != adminPass) //if password is incorrect
                          {
                              clearLCD();
                              setCursorPositionLCD(1,0);
@@ -251,7 +247,7 @@ int BaseMenu()
                 break;
     }
     }
-    if (choice != adminPass)
+    if (choice != adminPass) //if pin is incorrect
     {
         clearLCD();
         setCursorPositionLCD(1,0);
